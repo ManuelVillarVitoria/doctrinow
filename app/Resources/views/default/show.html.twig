@@ -7,7 +7,13 @@
     <header class="w3-container w3-blue">
       <h1>{{product.name}}</h1>
     </header>
-
+    <div class="w3-panel w3-pale-blue w3-leftbar w3-rightbar w3-border-blue">
+    {% for message in app.flashes('notice') %}
+      <div class="flash-notice">
+          {{ message }}
+      </div>
+    {% endfor %}
+    </div>
     <div class="w3-container">
       <p>{{product.name}}</p>
       <p>{{product.description}}</p>

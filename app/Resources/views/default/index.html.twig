@@ -4,6 +4,18 @@
 <div class="w3-container">
     <div class="w3-panel w3-pale-green">
       <h1>Productes ({{ products | length }})<i class="fa fa-bullhorn w3-text-brown" style="font-size:36px"></i></h1>
+      <form id="myform" action="" method="post" class="w3-container">
+          <label>Preu minim</label>
+          <input id="preu" name="preu" class="w3-input" type="text">
+          <input type="submit" name="submit" value="Submit"> 
+      </form>
+    </div>
+    <div class="w3-panel w3-pale-blue w3-leftbar w3-rightbar w3-border-blue">
+    {% for message in app.flashes('notice') %}
+      <div class="flash-notice">
+          {{ message }}
+      </div>
+    {% endfor %}
     </div>
     <a href="{{ path('create') }}"><button style="float: right;" class="w3-button w3-circle w3-teal">+</button></a>
    <table class="w3-table w3-striped">
@@ -12,12 +24,20 @@
               <td>{{ product.id }}</td>
               <td>{{ product.name }}</td>
               <td>{{ product.description }}</td>
-              <td>{{ product.postedAt | date("m-d-Y")}}</td>
               <td>{{ product.price }}$</td>
               <td><a href="{{ path('show', {'id': product.id}) }}"><button class="w3-btn w3-round w3-teal">Show</button></a></td> 
-              <td><a href="{{ path('edit', {'id': product.id}) }}"><button class="w3-btn w3-round w3-teal">Edit</button></a></td>    
+              <td><a href="{{ path('edit', {'id': product.id}) }}"><button class="w3-btn w3-round w3-teal">Edit</button></a></td>
+              <td><a onclick="return confirm('Estas segur d\'esborrar aquest element?');" href="{{ path('delete', {'id': product.id}) }}"><button class="w3-btn w3-round w3-red">Delete</button></a></td>  
           </tr>
        {% endfor %}
   </table>
-</div>
+</div> 
+<script>
+function myFunction() {
+    var preu = document.getElementById('preu').value;
+    $('#myform').attr('action', "/preu/" + preu);
+    document.myform.submit();
+}
+</script>
 {% endblock %}
+

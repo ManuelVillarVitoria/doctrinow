@@ -85,6 +85,7 @@ class DefaultController extends Controller
             $product->setPrice($request->get('price'));
 
             $em->flush();
+            $this->addFlash('notice', 'S\'ha editat el producte '.$product->getName().' amb id '.$productId);
             return $this->render('default/show.html.twig', array('product' => $product));
         }
 
@@ -100,6 +101,32 @@ class DefaultController extends Controller
 
         $product = $em->getRepository('AppBundle:Product')->find($productId);
 
+        $em->remove($product);
+        $em->flush();
+
+        $this->addFlash('notice', 'S\'ha eliminat el producte '.$product->getName().' amb id '.$productId);
+        $this->addFlash('notice', 'aQUEST ES UN ALTRE MISSATGE');
+
+        return $this->redirectToRoute('homepage');
+
+    }
+
+    /**
+     * @Route("/preu/{preu}", name="preu", requirements={"id": "\d+"})
+     */
+    public function preuAction(Request $request){
+        $price = $request->get('preu');
+        $em = $this->get('doctrine')->getManager();
+        $query = $em->createQuery(
+            'SELECT p
+            FROM AppBundle:Product p
+            WHERE p.price < :price
+            ORDER BY p.price ASC'
+        )->setParameter('price', $price);
+
+        $products = $query->getResult();
+
+        return $this->render('default/index.html.twig', array('products' => $products));
     }
 
 }
