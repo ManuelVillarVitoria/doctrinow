@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="w3-container">
+    <div class="w3-panel w3-pale-green">
+      <h1>Productes ({{ products | length }})<i class="fa fa-bullhorn w3-text-brown" style="font-size:36px"></i></h1>
+    </div>
+    <button style="float: right;" class="w3-button w3-circle w3-teal">+</button>
+   <table class="w3-table w3-striped">
+       {% for product in products %}
+          <tr>
+              <td>{{ product.id }}</td>
+              <td>{{ product.name }}</td>
+              <td>{{ product.description }}</td>
+              <td>{{ product.postedAt | date("m-d-Y")}}</td>
+              <td>{{ product.price }}$</td>
+              <td><a href="{{ path('show', {'id': product.id}) }}"><button class="w3-btn w3-round w3-teal">Show</button></a></td> 
+              <td><a href="{{ path('edit', {'id': product.id}) }}"><button class="w3-btn w3-round w3-teal">Edit</button></a></td>    
+          </tr>
+       {% endfor %}
+  </table>
+</div>
+{% endblock %}
