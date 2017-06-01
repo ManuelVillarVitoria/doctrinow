@@ -21,7 +21,7 @@ class DefaultController extends Controller
         $em = $this->get('doctrine')->getManager();
         $productRepo = $em->getRepository('AppBundle:Product');
 
-        $products = $productRepo->findAll();
+        $products = $productRepo->findBy([], ['id' => 'DESC']);
         return $this->render('default/index.html.twig', array('products' => $products));
     }
 
@@ -29,22 +29,22 @@ class DefaultController extends Controller
      * @Route("/create", name="create")
      */
     public function createAction(Request $request){
-        $em = $this->get('doctrine')->getManager();
-        $product = new Product();
-        $product->setName('Keyboard');
-        $product->setPrice(19.99);
-        //$product->setShortDescription('Ergonomic');
-        $product->setDescription('Ergonomic and stylish!');
-        $product->setPostedAt(new \DateTime("now"));
-
-        // tells Doctrine you want to (eventually) save the Product (no queries yet)
-        $em->persist($product);
-
-        // actually executes the queries (i.e. the INSERT query)
-        $em->flush();
-
-        //return new Response('Saved new product with id '.$product->getId());
-        return $this->render('default/show.html.twig', array('product' => $product));
+        if($request->getMethod() == 'POST'){
+            $em = $this->get('doctrine')->getManager();
+            $product = new Product();
+            $this->get('logger')->info('Entra a metode POST del CREATE');
+            $product->setName($request->get('name'));
+            
+            $product->setDescription($request->get('description'));
+            $product->setShortDescription($request->get('shortDescription'));
+            $product->setPrice($request->get('price'));
+            $product->setPostedAt(new \DateTime("now"));
+            //Desem el producte
+            $em->persist($product);
+            $em->flush();
+            return $this->render('default/show.html.twig', array('product' => $product));
+        }
+        return $this->render('default/edit.html.twig');
     }
 
     /**
@@ -91,5 +91,15 @@ class DefaultController extends Controller
         return $this->render('default/edit.html.twig', array('product' => $product));
     }
 
+    /**
+     * @Route("/delete/{id}", name="delete", requirements={"id": "\d+"})
+     */
+    public function deleteAction(Request $request){
+        $productId = $request->get('id');
+        $em = $this->get('doctrine')->getManager();
+
+        $product = $em->getRepository('AppBundle:Product')->find($productId);
+
+    }
 
 }

@@ -6,31 +6,32 @@
 
   <div class="w3-card-4">
     <header class="w3-container w3-blue">
-      <h1>{{product.name}} {{ product.id }} </h1>
+      <h1>{{product.name | default("")}} {{ product.id | default("")}} </h1>
     </header>
 
 
-  <form method="post" action="{{ path('edit', {'id': product.id}) }}" class="w3-container w3-card-4">
+  <form method="post" action="{% if product is not defined %}{{ path('create') }}{% else %}{{ path('edit', {'id': product.id})  }}{% endif %}" class="w3-container w3-card-4">
     <p>
-      <input name="name" value="{{product.name}}" class="w3-input" type="text" style="width:90%" required>
+      <input name="name" value="{{product.name | default("")}}" class="w3-input" type="text" style="width:90%" required>
       <label>Name</label></p>
     <p>
     <p>
-      <input name="shortDescription" value="{{product.shortDescription}}" class="w3-input" type="text" style="width:90%" required>
+      <input name="shortDescription" value="{{product.shortDescription | default("")}}" class="w3-input" type="text" style="width:90%" required>
       <label>Short Description</label></p>
     <p>
     <p>
-      <input name="description" value="{{product.description}}" class="w3-input" type="text" style="width:90%" required>
+      <input name="description" value="{{product.description | default("")}}" class="w3-input" type="text" style="width:90%" required>
       <label>Description</label></p>
     <p>
     <p>
-      <input name="price" value="{{product.price}}" class="w3-input" type="text" style="width:90%" required>
+      <input name="price" value="{{product.price | default("")}}" class="w3-input" type="text" style="width:90%" required>
       <label>Price $</label></p>
     <p>
     <input type="submit" name="submit" value="Submit"> 
   </form>
     <footer class="w3-container w3-blue">
-      <h5>{{product.postedAt.timezone}} - {{product.postedAt | date("m/d/Y") }}</h5>
+
+      <h5>{{product.postedAt.timezone | default("")}} - {{product.postedAt | default("") | date("d/m/Y") }}</h5>
     </footer>
   </div>
 </div>

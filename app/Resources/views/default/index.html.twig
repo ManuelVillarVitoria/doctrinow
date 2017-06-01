@@ -5,7 +5,7 @@
     <div class="w3-panel w3-pale-green">
       <h1>Productes ({{ products | length }})<i class="fa fa-bullhorn w3-text-brown" style="font-size:36px"></i></h1>
     </div>
-    <button style="float: right;" class="w3-button w3-circle w3-teal">+</button>
+    <a href="{{ path('create') }}"><button style="float: right;" class="w3-button w3-circle w3-teal">+</button></a>
    <table class="w3-table w3-striped">
        {% for product in products %}
           <tr>
